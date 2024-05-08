@@ -1,0 +1,57 @@
+from machine import Pin
+from dht import DHT22
+from ds18x20 import DS18X20
+from onewire import OneWire
+
+
+config = {
+    "SEND_URL": "https://www.xyz.com/temperature.php?th={th}&time={now}&l={location}",
+    "LOG_URL": "https://www.xyz.com/temperature.php",
+    "SAMPLING_TIME": 60 * 10,  # seconds, send measurement every 10 minutes
+    "LOG_TO_DISK": True,  # write log locally, True/False
+    "LOG_FILE": "/log.txt",  # path to log file, only relevant if LOCAL_LOG is True
+    "LOG_FILE_MAX_SIZE": 1024 * 1024 * 5,  # max log file size, bytes
+    "KEEP_HISTORY": True,  # keep measurement/logs if network is not available, if false drop and forget
+    "HISTORY_MAX_LEN": 10,  # how many items to keep in history
+    "WIFI_SSID": "widenet",
+    "WIFI_PASSWORD": "w1d3n3t",
+    "WIFI_CONNECT_TIME": 60,  # seconds, try to connect every minute
+    "NTP_SYNC_TIME": 60 * 5,  # seconds, try to set time every 5 minutes
+    "GC_TIME": 60 * 5,  # seconds, run garbage collection
+    "USE_RELAY": False,  # power on external relay, True/False
+}
+
+sensors = {
+    "room": {
+        "enabled": True,
+        "type": "dht",
+        "loc": DHT22(Pin(5)),  # D1
+    },
+    "fermentor1": {
+        "enabled": True,
+        "type": "ds",
+        "loc": DS18X20(OneWire(Pin(4))),  # D2
+        "rom": bytearray(b"(\x85&F\xd4\x15*["),
+    },
+    "fermentor2": {
+        "enabled": True,
+        "type": "ds",
+        "loc": DS18X20(OneWire(Pin(4))),  # D2
+        "rom": bytearray(b"(\x06\\C\xd447\xdc"),
+    },
+}
+
+relais = {
+    "fermentor1": {
+        "enabled": True,
+        "target_temp": 20,
+        "delta": 1,
+        "loc": Pin(32, mode=Pin.OUT),
+    },
+    "fermentor2": {
+        "enabled": True,
+        "target_temp": 20,
+        "delta": 1,
+        "loc": Pin(32, mode=Pin.OUT),
+    },
+}

@@ -1,0 +1,18 @@
+<?php
+
+define('DBNAME', "temperature");
+define('DBUSER',"temperature");
+define('DBPASS', "shhhh");
+define('DBHOST', "localhost");
+define('DBTABLE', 'temperature');
+
+define('HISTORY_RETAIN', 86400 * 365); // keep one year of log
+define('ESP_TIME_GAP', 946684801); // esp32 time.time epoch starts from 2000
+
+define('LOCATIONS', array("room", "fermentor1", "fermentor2"));
+
+define('TARGET_TEMP', array(
+    "fermentor1" => 20,
+    "fermentor2" => 20,
+));
+?>
