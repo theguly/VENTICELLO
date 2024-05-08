@@ -6,6 +6,7 @@ import urequests
 from dht import DHT22
 from ds18x20 import DS18X20
 
+
 class glog:
     def __init__(self, wlan, config):
         self.wlan = wlan
@@ -141,14 +142,14 @@ async def send_message(th, now, location):
 
 
 async def main(history, sensors, wlan):
-    t0 = t_network = t_ntp = int(time())
+    t0 = t_network = t_ntp = t_measure = int(time())
     ntp_init = False
     # _ = asyncio.create_task(do_connect(wlan))
     await do_connect(wlan)
     await asyncio.sleep(0.1)
     if wlan.isconnected():
         try:
-            await settime()
+            settime()
             ntp_init = True
         except Exception as ex:
             log.glog(f"166cannot set time: {ex}", todisk=True)
@@ -172,7 +173,10 @@ async def main(history, sensors, wlan):
                 except Exception as ex:
                     log.glog(f"184cannot set time: {ex}")
 
-        if not now % config["SAMPLING_TIME"]:
+        if not (now % config["SAMPLING_TIME"]) or (
+            now > t_measure + config["SAMPLING_TIME"]
+        ):
+            t_measure = now
             for name, sensor in sensors.items():
                 th = False
                 if not sensor.get("enabled"):
