@@ -1,6 +1,6 @@
 # VENTICELLO
 
-(https://upload.wikimedia.org/wikipedia/it/6/6b/Bombolopiange.jpg)
+![](https://upload.wikimedia.org/wikipedia/it/6/6b/Bombolopiange.jpg)
 
 inkbird has a very useful thermometer that can power a heating/cooling source when temperature goes above/beyond a configured limit, and also provide a cool mobile app.
 
