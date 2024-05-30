@@ -96,6 +96,7 @@ the web configuration is very similar to the python one, but it's way shorter. e
 
 - implement authentication
 - add some pictures to README.md
+- remove wlan as requirement?
 - ticks on graph.php are not always the best
 - measure.py adjust tosend log time after ntp
 - get rid of the useless uasyncio

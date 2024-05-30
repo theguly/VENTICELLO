@@ -5,10 +5,10 @@ from onewire import OneWire
 
 
 config = {
-    "SEND_URL": "https://www.xyz.com/temperature.php?th={th}&time={now}&l={location}",
-    "LOG_URL": "https://www.xyz.com/temperature.php",
+    "BASE_URL": "https://www.xyz.com/temperature.php",
     "SAMPLING_TIME": 60 * 10,  # seconds, send measurement every 10 minutes
-    "LOG_TO_DISK": True,  # write log locally, True/False
+    "TEMP_CONTROL_RECHECK": 60,  # seconds, override SAMPLING_TIME if temperature is controlled using a relay
+    "LOG_TO_DISK": False,  # write log locally, True/False
     "LOG_FILE": "/log.txt",  # path to log file, only relevant if LOCAL_LOG is True
     "LOG_FILE_MAX_SIZE": 1024 * 1024 * 5,  # max log file size, bytes
     "KEEP_HISTORY": True,  # keep measurement/logs if network is not available, if false drop and forget
@@ -19,6 +19,9 @@ config = {
     "NTP_SYNC_TIME": 60 * 5,  # seconds, try to set time every 5 minutes
     "GC_TIME": 60 * 5,  # seconds, run garbage collection
     "USE_RELAY": False,  # power on external relay, True/False
+    "TELEGRAM_API_TOKEN": False,
+    "TELEGRAM_BOT": False,
+
 }
 
 sensors = {
@@ -43,15 +46,12 @@ sensors = {
 
 relais = {
     "fermentor1": {
-        "enabled": True,
+        "enabled": True, # explicit enable, disabled by default
         "target_temp": 20,
         "delta": 1,
-        "loc": Pin(32, mode=Pin.OUT),
-    },
-    "fermentor2": {
-        "enabled": True,
-        "target_temp": 20,
-        "delta": 1,
-        "loc": Pin(32, mode=Pin.OUT),
-    },
+        "loc": {
+            "heating": Pin(12, mode=Pin.OUT), # D6
+            "cooling": Pin(14, mode=Pin.OUT), # D5
+        },
+    }
 }
